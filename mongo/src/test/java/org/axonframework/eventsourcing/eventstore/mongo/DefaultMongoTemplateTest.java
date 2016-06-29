@@ -17,9 +17,8 @@
 package org.axonframework.eventsourcing.eventstore.mongo;
 
 import com.mongodb.DB;
-import com.mongodb.Mongo;
-import org.junit.Before;
-import org.junit.Test;
+import com.mongodb.MongoClient;
+import org.junit.*;
 
 import static org.mockito.Mockito.*;
 
@@ -29,12 +28,12 @@ import static org.mockito.Mockito.*;
 public class DefaultMongoTemplateTest {
 
     private DefaultMongoTemplate mongoTemplate;
-    private Mongo mockMongo;
+    private MongoClient mockMongo;
     private DB mockDb;
 
     @Before
     public void createFixtures() {
-        mockMongo = mock(Mongo.class);
+        mockMongo = mock(MongoClient.class);
         mockDb = mock(DB.class);
         when(mockMongo.getDB(anyString())).thenReturn(mockDb);
         mongoTemplate = new DefaultMongoTemplate(mockMongo);
@@ -58,22 +57,11 @@ public class DefaultMongoTemplateTest {
     }
 
     @Test
-    public void testAuthentication() {
-        char[] password = "pw".toCharArray();
-        mongoTemplate = new DefaultMongoTemplate(mockMongo, "dbName", "events", "snapshots", "username", password);
-        mongoTemplate.eventCollection();
-
-        verify(mockDb).authenticate("username", password);
-    }
-
-    @Test
     public void testCustomProvidedNames() throws Exception {
         mongoTemplate = new DefaultMongoTemplate(mockMongo,
-                                                 "customdatabase",
-                                                 "customevents",
-                                                 "customsnapshots",
-                                                 null,
-                                                 null);
+                "customdatabase",
+                "customevents",
+                "customsnapshots");
 
         mongoTemplate.eventCollection();
         verify(mockDb).getCollection("customevents");

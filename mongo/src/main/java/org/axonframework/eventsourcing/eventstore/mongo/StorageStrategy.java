@@ -39,10 +39,10 @@ import java.util.Optional;
 public interface StorageStrategy {
 
     void appendEvents(DBCollection eventCollection, List<? extends EventMessage<?>> events,
-                      Serializer serializer) throws MongoException.DuplicateKey;
+                      Serializer serializer);
 
     void appendSnapshot(DBCollection snapshotCollection, DomainEventMessage<?> snapshot,
-                        Serializer serializer) throws MongoException.DuplicateKey;
+                        Serializer serializer);
 
     void deleteSnapshots(DBCollection snapshotCollection, String aggregateIdentifier);
 
